@@ -1,0 +1,46 @@
+# ============================================================================
+# BBPE 工程配置
+# ----------------------------------------------------------------------------
+# 为什么用 uv + pyproject 而不是 requirements.txt：
+#   .venv 本身就是 uv 创建的（见 .venv/pyvenv.cfg），uv 能解析锁文件，
+#   60k 词表的训练是可复现实验，依赖版本漂移会让"同一份语料训出不同词表"
+#   这种问题无法排查，所以必须锁版本。
+#
+# package = false：本项目是"虚拟工程"，uv 只负责装依赖，不把自己打包安装。
+#   这样 BBPE.py / bbpe/ 直接以源码方式运行，改代码不需要重新 install，
+#   避免出现" site-packages 里的旧副本 shadow 源码"这种极难排查的坑。
+# ============================================================================
+[project]
+name = "bbpe"
+version = "0.1.0"
+description = "Byte-level BPE tokenizer: streaming corpus preparation, exact incremental merge training, atomic checkpointing"
+requires-python = ">=3.11"
+
+# 核心依赖：推理与训练引擎在离线、无网络环境下也必须可用，
+# 因此这里只放"算法本体"需要的东西，HF 数据加载全部放在 train extra 里。
+dependencies = [
+    "numpy>=1.26",       # 参数二进制落盘(counter/words 的整型数组)、批量字节映射
+    "regex>=2024.5.15",  # GPT-2 预切分正则含 \p{L} 属性类，标准库 re 不支持
+]
+
+[project.optional-dependencies]
+# 只有真正要从 HuggingFace 流式拉语料时才需要装这个 extra。
+# 冒烟测试与推理路径绝不导入 datasets/huggingface_hub（全部为函数内延迟导入），
+# 所以不装也能跑通整条流水线 —— 这是"业务逻辑与数据来源解耦"的关键。
+train = [
+    "datasets>=3.0",
+    "huggingface-hub>=0.25",
+    "requests>=2.32",
+]
+dev = [
+    "pytest>=8.2",
+]
+
+[tool.uv]
+package = false
+
+[tool.pytest.ini_options]
+# 让测试直接 import bbpe / BBPE 而无需 pip install -e .
+pythonpath = ["."]
+testpaths = ["tests"]
+addopts = "-q --tb=short"

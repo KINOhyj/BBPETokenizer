@@ -1,0 +1,41 @@
+{
+  "format_version": 2,
+  "generation": 32,
+  "saved_at": "2026-10-28T19:21:39",
+  "vocab": {
+    "base_vocabulary_size": 257,
+    "max_vocabulary_size": 60000,
+    "end_of_text_id": 256,
+    "flatten_base": 60000
+  },
+  "pretoken_version": "gpt2",
+  "counts": {
+    "vocab_size": 9679,
+    "merges": 9422,
+    "unique_words": 26258,
+    "pairs": 60000,
+    "next_id": 9679
+  },
+  "files": {
+    "vocab.json": {
+      "sha256": "c0c70e9d9c0c218e598c939296fed0c940b2c795f82f33aa151d0135f3a47f11",
+      "bytes": 249866
+    },
+    "merges.txt": {
+      "sha256": "9c0d0712261b9d9b8cb6c277883b2c99da90f9f1a639fe4f3003c5b1b23ad251",
+      "bytes": 172616
+    },
+    "counter.npz": {
+      "sha256": "4f9d4ec899ae773dfc003f1e6c5966ac3f5d1982a4814c98c06e5fd4f25a0ee3",
+      "bytes": 960504
+    },
+    "words.npz": {
+      "sha256": "b3df61dad869444fd59d78f2814ca849b80382116ae288299f0695691321be0c",
+      "bytes": 593402
+    }
+  },
+  "extra": {
+    "train_config": "来源=注入的内存语料 目标语言量(MB)={'zh': 52.4, 'en': 52.4} 缓冲=1.0MB 唯一片段上限=不限 续训=True 每300合并提交一次",
+    "min_frequency": 2
+  }
+}
